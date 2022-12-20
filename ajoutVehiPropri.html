@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+    <!--Structure global de la page-->
+    <html lang = "fr">
+        <!--Contient les données d'entête générales à la page-->
+        <head>
+            <!--Configuration des métas données de la page par rapport à sa sensibilité-->
+            <meta charset = "UTF-8" http-equiv = "X-UA-Compatible" content = "IE=edge"/>
+            <meta name = "viewport" content = "width=device-width, initial-scale=1.0"/>
+            <!--Importation de fichier de style-->
+            <link rel = "stylesheet" href = "./style.css"/>
+            <!--Donnons un titre à notre page-->
+            <title>Ajouter un propriétaire et un véhicule</title>
+        </head>
+        <!--Structuration du contenu-->
+        <body align = "center">
+            <br/><br/><br/><br/><br/><br/><br/><br/>
+            <!--Conteneur générale-->
+            <div align = "center">
+                <!--Libelé contenant le titre de cette page-->
+                <label><strong><h3>Ajouter un propriétaire et une véhicule</h3></strong></label>
+                <!--Contient les informations nécessaires pour enregistrer le propriétaire d'une véhicule-->
+                <fieldset>
+                    <!--Contient le titre de notre section-->
+                    <legend>Informations sur le propriétaire</legend><br/>
+                    <!--Contient le nom du propriétaire-->
+                    <input type = "text" placeholder = "Nom" id = "nom"/><br/><br/>
+                    <!--Contient le(s) prénom(s) du propriétaire-->
+                    <input type = "text" placeholder = "Prénom(s)" id = "prenom"/><br/><br/>
+                    <!--Contient le sexe du propriétaire-->
+                    <select id = "sexe">
+                        <option value = '1' selected>Féminin</option>
+                        <option value = '0'>Masculin</option>
+                    </select><br/><br/>
+                    <!--Contient la ville d'habitation du propriétaire-->
+                    <input type = "text" placeholder = "Ville" id = "ville"/><br/><br/>
+                </fieldset><br/>
+                <!--Contient les informations nécessaires pour enregistrer le propriétaire d'une véhicule-->
+                <fieldset>
+                    <!--Contient le titre de notre section-->
+                    <legend>Informations sur le véhicule</legend><br/>
+                    <!--Contient le numéro d'immatriculation du véhicule-->
+                    <input type = "text" placeholder = "Immatriculation" id = "immatriculation"/><br/><br/>
+                    <!--Contient la couleur du véhicule-->
+                    <input type = "text" placeholder = "Couleur" id = "couleur"/><br/><br/>
+                    <!--Contient la puissance du véhicule-->
+                    <input type = "number" min = '1' placeholder = "Puissance" id = "puissance"/><br/><br/>
+                    <!--Contient le type de véhicule-->
+                    <input type = "text" placeholder = "Type" id = "type"/><br/><br/>
+                    <!--Contient la liste des marques déjà enregistées dans la base de données-->
+                    <select id = "liste_des_marques"></select><br/><br/>
+                    <!--Contient la liste des modèles déjà enregistés dans la base de données-->
+                    <select id = "liste_des_modeles"></select><br/><br/>
+                </fieldset><br/>
+                <!--Bouton de validation du formulaire-->
+                <button id = "button_de_validation">Valider</button><br/><br/>
+            </div>
+        </body>
+        <!--Importation de la librairie jquery-->
+        <script src = "./jquery.js" type = "text/javascript"></script>
+        <!--Importation de notre script de gestion des requêtes AJAX-->
+        <script src = "./ajax.js" type = "text/javascript"></script>
+        <!--Le script java ci-dessous est le contrôleur de notre page "ajoutVehiPropri.html"-->
+        <script type = "text/javascript">
+            // Cette méthode récupère la listes des modèles en fonction de l'identifiant de la marque du véhicule sélectionnée.
+            function recuperer_modeles (code_marque, modeles) {
+                // Appelons la méthode "ajax_avec_jquery ()" déjà définie dans notre script "ajax.js"
+                // pour récupérer la liste des modèles disponibles dans la base de données.
+                ajax_avec_jquery ("http://localhost:80/simple-cars-saver/ajoutVehiPropri.php", new Object ({
+                    operation: "recuperer_modeles", code_marque: code_marque
+                }), function (donnees) {
+                    // Suppression des anciennes valeurs.
+                    modeles.innerHTML = '';
+                    // Ajoutons chaque donnée récupérée de la base de données.
+                    for (let modele of donnees.modeles) {
+                        // Création d'une balise option qui représentera un modèle donné.
+                        let option = document.createElement ("option");
+                        // Changement de la valeur de l'option.
+                        option.innerHTML = modele.nommod;
+                        // Récupération de l'identifiant du modèle.
+                        option.value = modele.idmod;
+                        // Ajoutons ce modèle à notre sélecteur de modèle.
+                        modeles.appendChild (option);
+                    }
+                });
+            }
+
+            // Lorsque la page est entièrement chargée, exécute le code source ci-dessous.
+            window.onload = function () {
+                // Récupération de la référence de la balise <button> grâce à son identifiant sur le DOM.
+                let bouton_de_validation = document.getElementById ("button_de_validation");
+                // Récupération de la référence de la balise représentant la liste des marques sur le DOM.
+                let marques = document.getElementById ("liste_des_marques");
+                // Récupération de la référence de la balise représentant la liste des modèles sur le DOM.
+                let modeles = document.getElementById ("liste_des_modeles");
+
+                // Appelons la méthode "ajax_avec_jquery ()" déjà définie dans notre script "ajax.js"
+                // pour récupérer la liste des marques disponibles dans la base de données.
+                ajax_avec_jquery ("http://localhost:80/simple-cars-saver/ajoutVehiPropri.php", {"operation": "recuperer_marques"}, function (donnees) {
+                    // Ajoutons chaque donnée récupérée de la base de données.
+                    for (let marque of donnees.marques) {
+                        // Création d'une balise option qui représentera une marque donnée.
+                        let option = document.createElement ("option");
+                        // Changement de la valeur de l'option.
+                        option.innerHTML = marque.nommarq;
+                        // Récupération de l'identifiant de la marque.
+                        option.value = marque.codmarq;
+                        // Ajoutons cette marque à notre sélecteur de marque.
+                        marques.appendChild (option);
+                    }
+                    // Récupération des modèles disponibles à partir de la marque actuellement sélectionnée.
+                    recuperer_modeles (marques.value, modeles);
+                });
+                // Ecoutons l'événement de changement de valeur sur le sélecteur de marque afin de pouvoir récupérer tous les modèles
+                // disponibles sur ce dernier à chaque fois que sa valeur change.
+                marques.addEventListener ("change", function () {
+                    // Récupération des modèles disponibles pour la marque de véhicule actuellement sélectionnée.
+                    recuperer_modeles (marques.value, modeles);
+                });
+                // Ecoutons l'événement de "click" sur le bouton de validation pour faire nos opérations.
+                bouton_de_validation.addEventListener ("click", function () {
+                    // Récupération des données éssentielles du formulaire.
+                    const donnees_du_formulaire = new Object ({
+                        // Récupération de l'immatriculation de la voiture.
+                        immatriculation: document.getElementById ("immatriculation").value,
+                        // Récupération de la puissance du véhicule.
+                        puissance: document.getElementById ("puissance").value,
+                        // Récuparation de la couleur du véhicule.
+                        couleur: document.getElementById ("couleur").value,
+                        // Récupération du prénom du propriétaire.
+                        prenom: document.getElementById ("prenom").value,
+                        // Récupération de la ville du propriétaire.
+                        ville: document.getElementById ("ville").value,
+                        // Contient l'opération à effectuer.
+                        operation: "ajouter_proprietaire_et_vehicule",
+                        // Récupération du sexe du propriétaire.
+                        sexe: document.getElementById ("sexe").value,
+                        // Récupération du type de véhicule.
+                        type: document.getElementById ("type").value,
+                        // Récupération du nom du propriétaire.
+                        nom: document.getElementById ("nom").value,
+                        // Récupération du code du modèle sélectionné.
+                        code_modele: modeles.value
+                    });
+                    // Appelons la méthode "ajax_avec_jquery ()" définie dans notre script "ajax.js"
+                    // pour transmettre les données du formulaire à notre script "ajoutVehiPropri.php".
+                    ajax_avec_jquery ("http://localhost:80/simple-cars-saver/ajoutVehiPropri.php", donnees_du_formulaire, function (donnees) {
+                        // Prévenons l'utilisateur de la réussite de l'opération avec la boîte de dialogue du navigateur.
+                        alert ("L'opération a été ajouté avec succès !");
+                    // En cas d'erreur, affichons le message d'erreur ainsi détecté.
+                    }, function (status) {
+                        // Affiche le message d'erreur dans la console du navigateur.
+                        console.error (status);
+                    });
+                });
+            }
+        </script>
+    </html>

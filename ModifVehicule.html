@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+    <!--Structure global de la page-->
+    <html lang = "fr">
+        <!--Contient les données d'entête générales à la page-->
+        <head>
+            <!--Configuration des métas données de la page par rapport à sa sensibilité-->
+            <meta charset = "UTF-8" http-equiv = "X-UA-Compatible" content = "IE=edge"/>
+            <meta name = "viewport" content = "width=device-width, initial-scale=1.0"/>
+            <!--Importation de fichier de style-->
+            <link rel = "stylesheet" href = "./style.css"/>
+            <!--Donnons un titre à notre page-->
+            <title>Modifier un véhicule</title>
+        </head>
+        <!--Structuration du contenu-->
+        <body align = "center">
+            <!--Libelé contenant le titre de cette page-->
+            <label><strong><h3>Modifier un véhicule</h3></strong></label>
+            <!--Contient la liste des véhicules déjà enregistés dans la base de données-->
+            <select id = "liste_des_vehicules"></select><br/><br/>
+            <!--Contient le numéro d'immatriculation du véhicule-->
+            <input type = "text" placeholder = "Immatriculation" id = "immatriculation" disabled class = "disabled"/><br/><br/>
+            <!--Contient la couleur du véhicule-->
+            <input type = "text" placeholder = "Couleur" id = "couleur"/><br/><br/>
+            <!--Contient la puissance du véhicule-->
+            <input type = "number" min = '1' placeholder = "Puissance" id = "puissance"/><br/><br/>
+            <!--Contient le type de véhicule-->
+            <input type = "text" placeholder = "Type" id = "type"/><br/><br/>
+            <!--Bouton de validation du formulaire-->
+            <button id = "button_de_validation">Valider</button>
+        </body>
+        <!--Importation de notre script de gestion des requêtes AJAX-->
+        <script src = "./ajax.js" type = "text/javascript"></script>
+        <!--Le script java ci-dessous est le contrôleur de notre page "ModifVehicule.html"-->
+        <script type = "text/javascript">
+            // Lorsque la page est entièrement chargée, exécute le code source ci-dessous.
+            window.onload = function () {
+                // Récupération de la référence de la balise <button> grâce à son identifiant sur le DOM.
+                let bouton_de_validation = document.getElementById ("button_de_validation");
+                // Récupération de la référence de la balise contenant l'immatriculation d'un véhicule sur le DOM.
+                let immatriculation = document.getElementById ("immatriculation");
+                // Récupération de la référence de la balise représentant la liste des véhicules sur le DOM.
+                let vehicules = document.getElementById ("liste_des_vehicules");
+
+                // Appelons la méthode "ajax_avec_XMLHttpRequest ()" déjà définie dans notre script "ajax.js"
+                // pour récupérer la liste des véhicules disponibles dans la base de données.
+                ajax_avec_XMLHttpRequest ("http://localhost:80/simple-cars-saver/ModifVehicule.php", new Object ({
+                    operation: "recuperer_vehicules"
+                }), function (donnees) {
+                    // Ajoutons chaque donnée récupérée de la base de données.
+                    for (let vehicule of donnees.vehicules) {
+                        // Création d'une balise option qui représentera un véhicule donné.
+                        let option = document.createElement ("option");
+                        // Changement de la valeur de l'option.
+                        option.innerHTML = vehicule.nommod;
+                        // Récupération de l'immatriculation du véhicule.
+                        option.value = vehicule.numImmat;
+                        // Ajoutons ce véhicule à notre sélecteur de véhicule.
+                        vehicules.appendChild (option);
+                    }
+                    // Mise à jour du numéro d'immatriculation du véhicule actuellement sélectionné sur l'interface graphique.
+                    immatriculation.value = vehicules.value;
+                });
+                // Ecoutons l'événement de changement de valeur sur le sélecteur de véhicule afin de pouvoir récupérer l'immatriculation
+                // associé à ce dernier à chaque fois que sa valeur change.
+                vehicules.addEventListener ("change", function () {
+                    // Mise à jour du numéro d'immatriculation du véhicule actuellement sélectionné sur l'interface graphique.
+                    immatriculation.value = vehicules.value;
+                });
+                // Ecoutons l'événement de "click" sur le bouton de validation pour faire nos opérations.
+                bouton_de_validation.addEventListener ("click", function () {
+                    // Récupération des données éssentielles du formulaire.
+                    const donnees_du_formulaire = new Object ({
+                        // Récupération de l'immatriculation de la voiture.
+                        immatriculation: document.getElementById ("immatriculation").value,
+                        // Récupération de la puissance du véhicule.
+                        puissance: document.getElementById ("puissance").value,
+                        // Récuparation de la couleur du véhicule.
+                        couleur: document.getElementById ("couleur").value,
+                        // Récupération du type de véhicule.
+                        type: document.getElementById ("type").value,
+                        // Contient l'opération à effectuer.
+                        operation: "modifier_vehicule"
+                    });
+                    // Appelons la méthode "ajax_avec_XMLHttpRequest ()" définie dans notre script "ajax.js"
+                    // pour transmettre les données du formulaire à notre script "ModifVehicule.php".
+                    ajax_avec_XMLHttpRequest ("http://localhost:80/simple-cars-saver/ModifVehicule.php", donnees_du_formulaire, function () {
+                        // Prévenons l'utilisateur de la réussite de l'opération avec la boîte de dialogue du navigateur.
+                        alert ("Le véhicule sélectionné a été modifié avec succès !");
+                    // En cas d'erreur, affichons le message d'erreur ainsi détecté.
+                    }, function (status) {
+                        // Affiche le message d'erreur dans la console du navigateur.
+                        console.error (status);
+                    });
+                });
+            }
+        </script>
+    </html>

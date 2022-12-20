@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+    <!--Structure global de la page-->
+    <html lang = "fr">
+        <!--Contient les données d'entête générales à la page-->
+        <head>
+            <!--Configuration des métas données de la page par rapport à sa sensibilité-->
+            <meta charset = "UTF-8" http-equiv = "X-UA-Compatible" content = "IE=edge"/>
+            <meta name = "viewport" content = "width=device-width, initial-scale=1.0"/>
+            <!--Importation de fichier de style-->
+            <link rel = "stylesheet" href = "./style.css"/>
+            <!--Donnons un titre à notre page-->
+            <title>Ajouter un modèle</title>
+        </head>
+        <!--Structuration du contenu-->
+        <body align = "center">
+            <!--Libelé contenant le titre de cette page-->
+            <label><strong><h3>Ajouter un modèle de voiture</h3></strong></label>
+            <!--Contient le nom du model à ajouter-->
+            <input type = "text" placeholder = "Nom du model" id = "nom_modele"/><br/><br/>
+            <!--Contient l'année de fabrication du model ainsi précisé-->
+            <input type = "number" min = '1' placeholder = "Année de fabrication" id = "annee_fabrication"/><br/><br/>
+            <!--Contient la liste des marques déjà enregistées dans la base de données-->
+            <select id = "liste_des_marques"></select><br/><br/>
+            <!--Bouton permettant la soumission du formulaire-->
+            <button id = "button_de_validation">Ajouter ce modèle</button>
+        </body>
+        <!--Importation de notre script de gestion des requêtes AJAX-->
+        <script src = "./ajax.js" type = "text/javascript"></script>
+        <!--Le script java ci-dessous est le contrôleur de notre page "AjoutModele.html"-->
+        <script type = "text/javascript">
+            // Lorsque la page est entièrement chargée, exécute le code source ci-dessous.
+            window.onload = function () {
+                // Récupération de la référence de la balise <button> grâce à son identifiant sur le DOM.
+                let bouton_de_validation = document.getElementById ("button_de_validation");
+                // Récupération de la référence de la balise contenant l'année de fabrication du modèle.
+                let annee_de_fabrication = document.getElementById ("annee_fabrication");
+                // Récupération de la référence de la balise <select> grâce à son identifiant sur le DOM.
+                let marques = document.getElementById ("liste_des_marques");
+                // Récupération de la référence de la balise contenant le nom du modèle.
+                let nom_du_model = document.getElementById ("nom_modele");
+
+                // Appelons la méthode "ajax_avec_XMLHttpRequest ()" déjà définie dans notre script "ajax.js"
+                // pour récupérer la liste des marques disponibles dans la base de données.
+                ajax_avec_XMLHttpRequest ("http://localhost:80/simple-cars-saver/AjoutModele.php", new Object ({
+                    operation: "recuperer_marques"
+                }), function (donnees) {
+                    // Ajoutons chaque donnée récupérée de la base de données.
+                    for (let marque of donnees.marques) {
+                        // Création d'une balise option qui représentera une marque donnée.
+                        let option = document.createElement ("option");
+                        // Changement de la valeur de l'option.
+                        option.innerHTML = marque.nommarq;
+                        // Récupération de l'identifiant de la marque.
+                        option.value = marque.codmarq;
+                        // Ajoutons cette marque à notre sélecteur de marque.
+                        marques.appendChild (option);
+                    }
+                });
+                // Ecoutons l'événement de "click" sur le bouton de validation pour faire nos opérations.
+                bouton_de_validation.addEventListener ("click", function () {
+                    // Récupération des données éssentielles du formulaire.
+                    const donnees_du_formulaire = new Object ({
+                        // Récupération de l'année de fabrication.
+                        annee_de_fabrication: annee_de_fabrication.value,
+                        // Récupération du nom du modèle donné.
+                        modele_de_voiture: nom_du_model.value,
+                        // Contient l'opération à effectuer.
+                        operation: "ajouter_un_modele",
+                        // Récupération du code de la marque sélectionnée.
+                        code_marque: marques.value
+                    });
+                    // Appelons la méthode "ajax_avec_XMLHttpRequest ()" définie dans notre script "ajax.js"
+                    // pour transmettre les données du formulaire à notre script "AjoutModele.php".
+                    ajax_avec_XMLHttpRequest ("http://localhost:80/simple-cars-saver/AjoutModele.php", donnees_du_formulaire, function () {
+                        // Prévenons l'utilisateur de la réussite de l'opération avec la boîte de dialogue du navigateur.
+                        alert ("Le modèle a été ajouté avec succès !");
+                    // En cas d'erreur, affichons le message d'erreur ainsi détecté.
+                    }, function (status) {
+                        // Affiche le message d'erreur dans la console du navigateur.
+                        console.error (status);
+                    });
+                });
+            }
+        </script>
+    </html>
