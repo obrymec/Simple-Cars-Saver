@@ -24,7 +24,7 @@ This is the final result of the project:<br/><br/>
 
 ### <u>Project cloning</u>:
 ```sh
-git clone https://github.com/obrymec/Simple-Cars-Saver simple-cars-saver/
+git clone git@github.com:obrymec/Simple-Cars-Saver.git simple-cars-saver/
 ```
 
 ### <u>Tasks before run the project</u>:
