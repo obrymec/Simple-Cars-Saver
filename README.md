@@ -32,14 +32,14 @@ After you clone the project, you should do the following tasks before run it:
 - Move the project folder to your Wampp or Xampp server folder;
 - Turn on your Wampp or Xampp server;
 - Go to phpMyAdmin in your favorite browser or via the link: http://localhost/phpmyadmin/
-- Create a database named exactly like this: <i style = "color: skyblue;">cars_saver</i>;
+- Create a database named exactly like this: <i><strong>cars_saver</strong></i>;
 - Select the newly created database;
-- Click on the <i style = "color: skyblue;">Import</i> tab at the top;
-- Click on the <i style = "color: skyblue;">Choose a file</i> button in the <i style = "color: skyblue;">File to import</i> section;
-- Load the file <i style = "color: skyblue;">tables.sql</i> located at the root of the project;
-- Then click on the <i style = "color: skyblue;">Import</i> button located at the very bottom of the page.<br/>
-After this operation, you will see that tables have been automatically created in your database named <i style = "color: skyblue;">cars_saver</i>.
-- Select the <i style = "color: skyblue;">marque</i> table and fill it with the brands of your choice.<br/>
+- Click on the <i><strong>Import</strong></i> tab at the top;
+- Click on the <i><strong>Choose a file</strong></i> button in the <i><strong>File to import</strong></i> section;
+- Load the file <i><strong>tables.sql</strong></i> located at the root of the project;
+- Then click on the <i><strong>Import</strong></i> button located at the very bottom of the page.<br/>
+After this operation, you will see that tables have been automatically created in your database named <i><strong>cars_saver</strong></i>.
+- Select the <i><strong>marque</strong></i> table and fill it with the brands of your choice.<br/>
 Now you are ready to run the project.
 
 ### <u>Run project</u>:
