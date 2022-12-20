@@ -20,7 +20,6 @@ This is the final result of the project:<br/><br/>
 
 ### <u>Install XAMPP or WAMP</u>:
 - For XAMPP downloading, you can find it at this link: <a href = "https://www.apachefriends.org/fr/download.html">https://www.apachefriends.org/fr/download.html</a>
-<br/>
 - For WAMP downloading, you can find it at this link: <a href = "https://www.wampserver.com/en">https://www.wampserver.com/en/</a>
 
 ### <u>Project cloning</u>:
