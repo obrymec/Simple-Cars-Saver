@@ -7,7 +7,7 @@
 ![](https://img.shields.io/badge/html-%205-blue)
 ![](https://img.shields.io/badge/php-7.4-blue)
 
-This small project is an academy project. The main goal of this app is to be able to save owners's cars.
+This small project is an academy project. The main goal of this app is to be able to save owners's cars. This app uses native Web Development Languages on front-end and PHP on back-end to manage client requests. PhpMyAdmin and MySQL is used to control app database. The communication between front-end and back-end uses AJAX method and JSON to transfer data from the front-end to back-end.
 
 ## Final result
 This is the final result of the project:<br/><br/>
