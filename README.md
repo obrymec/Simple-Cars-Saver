@@ -49,6 +49,6 @@ To navigate between project views, you can uses the following below links:
 - http://localhost/simple-cars-saver/ModifVehicule.html
 - http://localhost/simple-cars-saver/AjoutModele.html
 
-<u><strong>NB</strong></u>: Make sure that the project folder name is: <i style = "color: skyblue;"><strong>simple-cars-saver</i></strong>
+<u><strong>Pay Attention</strong></u>: Make sure that the project folder name is: <i style = "color: skyblue;"><strong>simple-cars-saver</i></strong>
 
 Enjoy :)
